@@ -1,0 +1,36 @@
+let sg_resources = Resources.*[ Type == 'AWS::EC2::SecurityGroup' ]
+
+rule ingress_rule_not_in_anyipv4_to_any_traffic when %sg_resources !empty {
+    let ingress = %sg_resources.Properties.SecurityGroupIngress[
+        IpProtocol   is_string
+    ]
+
+    %ingress[*] {
+        when this.CidrIp == "0.0.0.0/0" {
+            this.IpProtocol != "-1"
+        }
+        
+    }
+}
+
+rule ingress_rule_allow_anyip_protocol_to_company_ip when %sg_resources !empty {
+    let ingress = %sg_resources.Properties.SecurityGroupIngress[
+        IpProtocol   is_string
+    ]
+    %ingress[*] {
+        when this.CidrIp == "1.2.3.4/32" {
+            this.IpProtocol IN ["tcp", "udp", "-1"]
+        }
+    }
+}
+
+rule ingress_rule_allow_http_https_can_from_anyip when %sg_resources !empty {
+    let ingress = %sg_resources.Properties.SecurityGroupIngress[
+        IpProtocol   is_string
+    ]
+    %ingress[*] {
+        when this.CidrIp == "0.0.0.0/0" {
+            this.FromPort IN [443, 80]
+        }
+    }
+}

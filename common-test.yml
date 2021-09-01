@@ -1,0 +1,51 @@
+- input:
+    Resources:
+      rcsg:
+        Type: 'AWS::EC2::SecurityGroup'
+        Properties:
+          SecurityGroupIngress: 
+            - "CidrIp": "0.0.0.0/0"
+              "IpProtocol": "-1"
+            - "CidrIp": "61.216.89.235/32"
+              "IpProtocol": "-1"
+  expectations:
+    rules:
+      ingress_rule_not_in_anyipv4_to_any_traffic: FAIL
+      ingress_rule_allow_anyip_protocol_to_CFH_ip: PASS
+- input:
+    Resources:
+      rcsg2:
+        Type: 'AWS::EC2::SecurityGroup'
+        Properties:
+          SecurityGroupIngress:
+            - "CidrIp": "1.2.3.4/32"
+              "IpProtocol": "TCP"
+  expectations:
+    rules:
+      ingress_rule_not_in_anyipv4_to_any_traffic: SKIP
+      ingress_rule_allow_anyip_protocol_to_CFH_ip: SKIP
+
+- input:
+    Resources:
+      rcsg3:
+        Type: 'AWS::EC2::SecurityGroup'
+        Properties:
+          SecurityGroupIngress:
+            - "CidrIp": "1.2.3.4/32"
+              "IpProtocol": "-1"
+  expectations:
+    rules:
+      ingress_rule_not_in_anyipv4_to_any_traffic: SKIP
+      ingress_rule_allow_anyip_protocol_to_CFH_ip: SKIP
+- input:
+    Resources:
+      rcsg3:
+        Type: 'AWS::EC2::SecurityGroup'
+        Properties:
+          SecurityGroupIngress:
+            - "CidrIp": "0.0.0.0/0"
+              "IpProtocol": "TCP"
+  expectations:
+    rules:
+      ingress_rule_not_in_anyipv4_to_any_traffic: PASS
+      ingress_rule_allow_anyip_protocol_to_CFH_ip: SKIP

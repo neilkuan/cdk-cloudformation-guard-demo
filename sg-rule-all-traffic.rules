@@ -1,0 +1,50 @@
+rule any_ip_ingress_checks
+{
+
+    let ports = InputParameter.TcpBlockedPorts[*]
+
+    let targets = configuration.ipPermissions[
+        #
+        # if either ipv4 or ipv6 that allows access from any address
+        #
+        some ipv4Ranges[*].cidrIp == '0.0.0.0/0' or
+        some ipv6Ranges[*].cidrIpv6 == '::/0'
+
+        #
+        # the ipProtocol is not UDP
+        #
+        ipProtocol != 'udp' ]
+        
+    when %targets !empty
+    {
+        %targets {
+            ipProtocol != '-1'
+            <<
+              result: NON_COMPLIANT
+              check_id: HUB_ID_2334
+              message: Any IP Protocol is allowed
+            >>
+
+            when fromPort exists 
+                 toPort exists 
+            {
+                let each_target = this
+                %ports {
+                    this < %each_target.fromPort or
+                    this > %each_target.toPort
+                    <<
+                        result: NON_COMPLIANT
+                        check_id: HUB_ID_2340
+                        message: Blocked TCP port was allowed in range
+                    >>
+                }
+            }
+
+        }       
+     }
+}
+
+
+rule ingress_rule_check {
+    any_ip_ingress_checks
+}
