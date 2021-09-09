@@ -208,4 +208,227 @@ not_applicable:
   - ingress_rule_allow_http_https_can_from_anyip
 compliant:
   - ingress_rule_allow_anyip_protocol_to_company_ip
-```# cdk-cloudformation-guard-demo
+```
+
+### k8s sample.
+```bash
+cd kubernetes
+
+cfn-guard validate -r deployment.guard -d bad-deploy.yaml  -o yaml
+--- example output ---
+bad-deploy.yaml Status = FAIL
+PASS rules
+deployment.guard/version_and_kind_match                PASS
+FAILED rules
+deployment.guard/ensure_deploy_has_owner_label         FAIL
+deployment.guard/ensure_container_has_memory_limits    FAIL
+---
+---
+data_from: bad-deploy.yaml
+rules_from: deployment.guard
+not_compliant:
+  ensure_container_has_memory_limits:
+    - rule: ensure_container_has_memory_limits
+      path: /spec/template/spec/containers/0
+      provided: ~
+      expected: ~
+      comparison: ~
+      message: "Attempting to retrieve array index or key from map at path = /spec/template/spec/containers/0 , Type was not an array/object map, Remaining Query = resources.limits"
+  ensure_deploy_has_owner_label:
+    - rule: ensure_deploy_has_owner_label
+      path: /metadata/labels
+      provided:
+        app: nginx
+      expected: ~
+      comparison:
+        operator: Exists
+        not_operator_exists: false
+      message: "\n            Id: Cathay_K8S_001\n            Description: Need Define Deployment Onwer\n        "
+not_applicable: []
+compliant:
+  - version_and_kind_matchbad-deploy.yaml Status = FAIL
+PASS rules
+deployment.guard/version_and_kind_match                PASS
+FAILED rules
+deployment.guard/ensure_deploy_has_owner_label         FAIL
+deployment.guard/ensure_container_has_memory_limits    FAIL
+---
+---
+data_from: bad-deploy.yaml
+rules_from: deployment.guard
+not_compliant:
+  ensure_container_has_memory_limits:
+    - rule: ensure_container_has_memory_limits
+      path: /spec/template/spec/containers/0
+      provided: ~
+      expected: ~
+      comparison: ~
+      message: "Attempting to retrieve array index or key from map at path = /spec/template/spec/containers/0 , Type was not an array/object map, Remaining Query = resources.limits"
+  ensure_deploy_has_owner_label:
+    - rule: ensure_deploy_has_owner_label
+      path: /metadata/labels
+      provided:
+        app: nginx
+      expected: ~
+      comparison:
+        operator: Exists
+        not_operator_exists: false
+      message: "\n            Id: Cathay_K8S_001\n            Description: Need Define Deployment Onwer\n        "
+not_applicable: []
+compliant:
+  - version_and_kind_match
+------
+```
+#### Let's take a look bad-deploy.yaml file.
+- [ ]  **need define onwer label**
+- [ ]  **need define container limits memory**
+```bash
+cat bad-deploy.yaml
+----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+------
+```
+
+```bash
+cfn-guard validate -r deployment.guard -d good-deploy.yaml  -o yaml
+--- example output ---
+good-deploy.yaml Status = PASS
+PASS rules
+deployment.guard/version_and_kind_match                PASS
+deployment.guard/ensure_deploy_has_owner_label         PASS
+deployment.guard/ensure_container_has_memory_limits    PASS
+---
+Evaluation of rules deployment.guard against data good-deploy.yaml
+--
+Rule [deployment.guard/ensure_deploy_has_owner_label] is compliant for template [good-deploy.yaml]
+Rule [deployment.guard/ensure_container_has_memory_limits] is compliant for template [good-deploy.yaml]
+Rule [deployment.guard/version_and_kind_match] is compliant for template [good-deploy.yaml]
+--
+------
+```
+
+
+
+
+### terraform sample.
+
+```bash
+cd terraform/good_instance
+
+terraform init
+
+terraform plan -out tfgood.bin
+
+terraform show -json tfgood.bin > tfgood.json
+
+cd ../bad_instance
+
+terraform init
+
+terraform plan -out tfbad.bin
+
+terraform show -json tfbad.bin > tfbad.json
+
+cd ..
+```
+
+#### Let's check 
+- bad instance
+```bash
+pwd 
+xxx/xxx/cdk-cloudformation-guard-demo/terraform
+
+cfn-guard validate -r terraform.guard -d bad_instance/tfbad.json -o yaml
+
+--- example output ---
+tfbad.json Status = FAIL
+FAILED rules
+terraform.guard/gcp_instance_need_lanuch_at_tw_az                  FAIL
+terraform.guard/gcp_instance_network_cannot_use_default_network    FAIL
+---
+---
+data_from: tfbad.json
+rules_from: terraform.guard
+not_compliant:
+  gcp_instance_network_cannot_use_default_network:
+    - rule: gcp_instance_network_cannot_use_default_network
+      path: /planned_values/root_module/resources/0/values/network_interface/0/network
+      provided: default
+      expected: default
+      comparison:
+        operator: Eq
+        not_operator_exists: true
+      message: "\n                Id: Cathay_GCP_001\n                Description: GCE Need Lanuch at Taiwan Region\n             "
+  gcp_instance_need_lanuch_at_tw_az:
+    - rule: gcp_instance_need_lanuch_at_tw_az
+      path: /planned_values/root_module/resources/0/values/zone
+      provided: us-central1-a
+      expected: asia-east1-a
+      comparison:
+        operator: In
+        not_operator_exists: false
+      message: "\n            Id: Cathay_GCP_001\n            Description: GCE Need Lanuch at Taiwan Region\n        "
+    - rule: gcp_instance_need_lanuch_at_tw_az
+      path: /planned_values/root_module/resources/0/values/zone
+      provided: us-central1-a
+      expected: asia-east1-b
+      comparison:
+        operator: In
+        not_operator_exists: false
+      message: "\n            Id: Cathay_GCP_001\n            Description: GCE Need Lanuch at Taiwan Region\n        "
+    - rule: gcp_instance_need_lanuch_at_tw_az
+      path: /planned_values/root_module/resources/0/values/zone
+      provided: us-central1-a
+      expected: asia-east1-c
+      comparison:
+        operator: In
+        not_operator_exists: false
+      message: "\n            Id: Cathay_GCP_001\n            Description: GCE Need Lanuch at Taiwan Region\n        "
+not_applicable: []
+compliant: []
+------
+```
+
+- good instance
+```bash
+pwd 
+xxx/xxx/cdk-cloudformation-guard-demo/terraform
+
+cfn-guard validate -r terraform.guard -d good_instance/tfgood.json -o yaml
+--- example output ---
+tfgood.json Status = PASS
+SKIP rules
+terraform.guard/gcp_instance_network_cannot_use_default_network    SKIP
+PASS rules
+terraform.guard/gcp_instance_need_lanuch_at_tw_az                  PASS
+---
+---
+data_from: tfgood.json
+rules_from: terraform.guard
+not_compliant: {}
+not_applicable:
+  - gcp_instance_network_cannot_use_default_network
+compliant:
+  - gcp_instance_need_lanuch_at_tw_az
+-----------
+```

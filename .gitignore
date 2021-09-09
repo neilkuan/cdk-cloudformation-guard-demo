@@ -6,11 +6,13 @@
 *.seed
 *.tgz
 *.tsbuildinfo
+*bin
 .cache
 .cdk.staging/
 .eslintcache
 .nyc_output
 .parcel-cache/
+.terraform*
 .yarn-integrity
 /coverage
 /dist
@@ -29,6 +31,7 @@ node_modules/
 npm-debug.log*
 pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+tf*.json
 yarn-debug.log*
 yarn-error.log*
 !/.eslintrc.json

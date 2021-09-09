@@ -1,0 +1,36 @@
+rule version_and_kind_match 
+{
+    apiVersion == /v1/
+    kind == 'Deployment'
+}
+
+rule ensure_deploy_has_owner_label when version_and_kind_match {
+
+    metadata.labels
+    {
+       owner exists
+        <<
+            Id: Cathay_K8S_001
+            Description: Need Define Deployment Onwer
+        >>
+   }
+}
+
+
+rule ensure_container_has_memory_limits when version_and_kind_match {
+
+    spec.template.spec.containers[*] 
+    {
+       resources.limits 
+       {
+            #
+            # Ensure that memory attribute is set
+            #
+            memory exists 
+            <<
+                Id: K8S_REC_22
+                Description: Memory limit must be set for the container
+            >>
+        }
+   }
+}

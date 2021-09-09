@@ -12,6 +12,9 @@ const project = new AwsCdkTypeScriptApp({
   },
   gitignore: [
     'cdk.context.json',
+    '.terraform*',
+    '*bin',
+    'tf*.json',
   ],
   autoDetectBin: false,
   depsUpgrade: DependenciesUpgradeMechanism.githubWorkflow({

@@ -1,0 +1,30 @@
+let gce = planned_values.root_module.resources.*[ type == 'google_compute_instance' ]
+
+
+rule gcp_instance_need_lanuch_at_tw_az when %gce !empty {
+
+    %gce.values
+    {
+       zone in ["asia-east1-a", "asia-east1-b", "asia-east1-c"]
+        <<
+            Id: Cathay_GCP_001
+            Description: GCE Need Lanuch at Taiwan Region
+        >>
+   }
+}
+
+
+rule gcp_instance_network_cannot_use_default_network  when %gce !empty {
+
+    %gce.values.network_interface[*]
+    {
+        when this.network is_string {
+            network != "default"
+             <<
+                Id: Cathay_GCP_001
+                Description: GCE Need Lanuch at Taiwan Region
+             >>
+        }
+       
+   }
+}
