@@ -22,7 +22,7 @@ rule gcp_instance_network_cannot_use_default_network  when %gce !empty {
             network != "default"
              <<
                 Id: Rules_GCP_002
-                Description: GCE Need Lanuch at Taiwan Region
+                Description: GCE Can Not Use Default Network
              >>
         }
        
