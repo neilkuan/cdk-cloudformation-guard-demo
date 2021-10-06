@@ -10,7 +10,7 @@ rule ensure_deploy_has_owner_label when version_and_kind_match {
     {
        owner exists
         <<
-            Id: Cathay_K8S_001
+            Id: Rule_K8S_001
             Description: Need Define Deployment Onwer
         >>
    }
