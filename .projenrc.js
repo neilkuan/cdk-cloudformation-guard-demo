@@ -1,5 +1,5 @@
-const { AwsCdkTypeScriptApp, DependenciesUpgradeMechanism } = require('projen');
-const project = new AwsCdkTypeScriptApp({
+const { awscdk } = require('projen');
+const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '1.120.0',
   defaultReleaseBranch: 'main',
   name: 'cdk-cloudformation-guard-demo',
@@ -17,12 +17,11 @@ const project = new AwsCdkTypeScriptApp({
     'tf*.json',
   ],
   autoDetectBin: false,
-  depsUpgrade: DependenciesUpgradeMechanism.githubWorkflow({
+  depsUpgradeOptions: {
     workflowOptions: {
       labels: ['auto-approve'],
-      secret: 'AUTOMATION_GITHUB_TOKEN',
     },
-  }),
+  },
   autoApproveOptions: {
     secret: 'GITHUB_TOKEN',
     allowedUsernames: ['neilkuan'],
