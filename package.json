@@ -13,6 +13,7 @@
     "deploy": "npx projen deploy",
     "destroy": "npx projen destroy",
     "diff": "npx projen diff",
+    "eject": "npx projen eject",
     "eslint": "npx projen eslint",
     "guardcheck": "npx projen guardcheck",
     "package": "npx projen package",
@@ -22,10 +23,8 @@
     "synth": "npx projen synth",
     "synth:silent": "npx projen synth:silent",
     "test": "npx projen test",
-    "test:update": "npx projen test:update",
     "test:watch": "npx projen test:watch",
     "upgrade": "npx projen upgrade",
-    "upgrade-projen": "npx projen upgrade-projen",
     "watch": "npx projen watch",
     "projen": "npx projen"
   },
@@ -33,21 +32,18 @@
     "@aws-cdk/assert": "^1.120.0",
     "@aws-cdk/assertions": "^1.120.0",
     "@types/jest": "^26.0.24",
-    "@types/node": "^12",
+    "@types/node": "^18",
     "@types/prettier": "2.6.0",
-    "@typescript-eslint/eslint-plugin": "^5",
-    "@typescript-eslint/parser": "^5",
+    "@typescript-eslint/eslint-plugin": "^7",
+    "@typescript-eslint/parser": "^7",
     "aws-cdk": "^1.120.0",
     "esbuild": "^0.23.1",
     "eslint": "^8",
-    "eslint-import-resolver-node": "^0.3.9",
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.30.0",
     "jest": "^27.5.1",
-    "jest-junit": "^13",
-    "json-schema": "^0.4.0",
-    "npm-check-updates": "^12",
-    "projen": "0.50.24",
+    "jest-junit": "^15",
+    "projen": "0.87.2",
     "ts-jest": "^27.1.5",
     "ts-node": "^9",
     "typescript": "4.6"
@@ -58,11 +54,15 @@
     "constructs": "^3.2.27"
   },
   "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "0.0.0",
   "jest": {
+    "coverageProvider": "v8",
     "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.ts?(x)",
-      "<rootDir>/(test|src)/**/?(*.)+(spec|test).ts?(x)"
+      "<rootDir>/@(src|test)/**/*(*.)@(spec|test).ts?(x)",
+      "<rootDir>/@(src|test)/**/__tests__/**/*.ts?(x)"
     ],
     "clearMocks": true,
     "collectCoverage": true,
