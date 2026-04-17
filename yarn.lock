@@ -1442,9 +1442,9 @@ available-typed-arrays@^1.0.7:
     possible-typed-array-names "^1.0.0"
 
 aws-cdk@^2:
-  version "2.1118.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.1118.0.tgz#7e12ccb083b26e8d28ed8bd6bffca2af0e73b270"
-  integrity sha512-Tfd865GRewDTXIbTVtix/l+v8t3rZENvdHcQQZS2wXYVXfHzljULFXe9JKkgZUNDPB1zo9tSBUu8jjiHRm7nWg==
+  version "2.1118.2"
+  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.1118.2.tgz#1319d4452976a40560b124358bb489e7f34cca9f"
+  integrity sha512-jHuShSx0JI14enDz2Hk2Qe0LYTDPzLyF2nBhWCvoXyRCpz31sI3XsCh4KO5ZXKfw9ET0bHvDTVnMZQPBpswg8A==
 
 babel-jest@^27.5.1:
   version "27.5.1"
@@ -1943,9 +1943,9 @@ dunder-proto@^1.0.0, dunder-proto@^1.0.1:
     gopd "^1.2.0"
 
 electron-to-chromium@^1.5.328:
-  version "1.5.338"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.338.tgz#7ca765a1fabed5e60b43c6f5e74363ecafcd3336"
-  integrity sha512-KVQQ3xko9/coDX3qXLUEEbqkKT8L+1DyAovrtu0Khtrt9wjSZ+7CZV4GVzxFy9Oe1NbrIU1oVXCwHJruIA1PNg==
+  version "1.5.339"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.339.tgz#d797bf5f222a7f6241a42b43a97bf52ff43947f1"
+  integrity sha512-Is+0BBHJ4NrdpAYiperrmp53pLywG/yV/6lIMTAnhxvzj/Cmn5Q/ogSHC6AKe7X+8kPLxxFk0cs5oc/3j/fxIg==
 
 emittery@^0.8.1:
   version "0.8.1"
